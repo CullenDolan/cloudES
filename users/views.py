@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm
+from django.contrib.auth.decorators import login_required
 
 # so users can sign up for a site
 def register(request):
@@ -16,6 +17,9 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
+@login_required  # a decorator adds functionality to a function
+def profile(request):
+    return render(request, 'users/profile.html')
 '''
 message methods:
 messages.debug
