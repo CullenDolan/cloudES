@@ -13,3 +13,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    
+    # function to redirect user after creating a blog post
+    

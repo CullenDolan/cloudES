@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Post
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
 # function view to create home page
 def home(request):
@@ -18,10 +18,19 @@ class PostListView(ListView):
     context_object_name = 'posts' #setting attribtue equal to posts in home function
     ordering = ['-date_posted']
 
-# list view
+# list view for reading specific blogs
 class PostDetailView(DetailView):
     model = Post
 
+# list view  for writing blogs
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'content'] # add a field for pictures
+
+    # autmoatically makes home is signed in as the submitter
+    def form_valid(self, form):
+        form.instance.author = self.request.user 
+        return super().form_valid(form)
 
 # function view to create about page
 def about(request):
