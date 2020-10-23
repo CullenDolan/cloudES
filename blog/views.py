@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Post
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 # function view to create home page
@@ -27,6 +27,10 @@ class PostDetailView(DetailView):
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'content'] # add a field for pictures
+        # autmoatically makes the signed in user as the author
+    def form_valid(self, form):
+        form.instance.author = self.request.user 
+        return super().form_valid(form)
 
  # list view  for updating blogs and only if ithe user created the blog
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -45,6 +49,19 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user 
         return super().form_valid(form)
+
+# list view deleting view
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    # add a route so when the post is successfully deleted
+    success_url = '/'
+    # check current user is author
+    def test_func(self):
+            post = self.get_object()
+            if self.request.user == post.author:
+                return True
+            else:
+                return False
 
 # function view to create about page
 def about(request):
