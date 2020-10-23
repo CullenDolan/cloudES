@@ -18,10 +18,13 @@ class PostListView(ListView):
     template_name = 'blog/home.html' # <app>/<model>_<viewtype>.html
     context_object_name = 'posts' #setting attribtue equal to posts in home function
     ordering = ['-date_posted']
+    paginate_by = 2
+
 
 # list view for reading specific blogs
 class PostDetailView(DetailView):
     model = Post
+
 
 # list view  for writing blogs
 class PostCreateView(LoginRequiredMixin, CreateView):
@@ -32,10 +35,12 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user 
         return super().form_valid(form)
 
+
  # list view  for updating blogs and only if ithe user created the blog
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title', 'content'] # add a field for pictures
+
 
     # check current user is author
     def test_func(self):
@@ -45,16 +50,20 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         else:
             return False
 
+
     # autmoatically makes home is signed in as the submitter
     def form_valid(self, form):
         form.instance.author = self.request.user 
         return super().form_valid(form)
+
 
 # list view deleting view
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     # add a route so when the post is successfully deleted
     success_url = '/'
+
+
     # check current user is author
     def test_func(self):
             post = self.get_object()
@@ -62,6 +71,7 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
                 return True
             else:
                 return False
+
 
 # function view to create about page
 def about(request):
