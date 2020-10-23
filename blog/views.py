@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Post
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # function view to create home page
 def home(request):
@@ -23,7 +24,12 @@ class PostDetailView(DetailView):
     model = Post
 
 # list view  for writing blogs
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['title', 'content'] # add a field for pictures
+
+ # list view  for updating blogs
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     fields = ['title', 'content'] # add a field for pictures
 
