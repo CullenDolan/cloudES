@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('ces_secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['cloudes.eba-i96qqzm2.us-west-2.elasticbeanstalk.com']
 
 
 # Application definition

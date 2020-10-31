@@ -1,1 +1,8 @@
 CLOUDES/.vscode
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+blog/__pycache__
+cloudes/__pycache__
+users/__pycache__
